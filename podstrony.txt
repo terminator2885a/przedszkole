@@ -1,0 +1,27 @@
+index.html - strona główna - o nas; w asidzie linki do podsekcji
+    kadra.html - nasze nauczycielki
+    plan_dnia.html - rozkład dnia
+    rekrutacja.html - rektutacja: regulamin + pliki do pobrania
+    rodo.html - ochrona danych osobowych
+    maloletni.html - standardy ochrony małoletnich
+grupy.html - grupy: zawiera listę grup z nazwiskami nauczycieli; w asidzie linki do podsekcji
+    ileś podstron z opisem grup
+wydarzenia.html - wydarzenia: miniatury artykułów; aside pusty
+    ileś podstron z relacjami z jakichś wydarzeń
+kalendarium.html - kalendarium: lista ważnych terminów (zebrania, bale, dnie babci itp); aside pusty
+rodzic.html (potem się przerobi na .php) - kącik rodzica; w asidzie linki do podsekcji
+    podsekcje do rozbudowy
+    komunikaty dyrekcji - dostępne ogólnie
+    jadłospis - dostępny ogólnie
+    zaloguj - dostępny ogólnie
+    informacje o dziecku - dostępne po zalogowaniu
+    wiadomości - dostępne po zalogowaniu
+    wyloguj - dostępne po zalogowaniu
+nauczyciel/index.php - panel nauczyciela; ten panel będzie miał trochę inny układ i wygląd niż reszta
+    dla wychowawców i dyrekcji: lista przedszkolaków w grupie
+    dla wychowawców i dyrekcji: informacje o przedszkolakach
+    dla dyrekcji: dodawanie przedszkolaka
+    dla wychowawców i dyrekcji: dodawanie artykułów o wydarzeniu
+    dla dyrekcji: dodawanie komunikatów dyrekcji
+    dla wychowawców i dyrekcji: wiadomości
+    
