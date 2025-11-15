@@ -1,0 +1,11 @@
+id_nauczyciela;nazwisko;imie;pesel;ranga;nr_telefonu;e_mail;login;password
+1;Zawadzka;Joanna;56121894848;1;123456789;j.zawadzka@gmail.com;dyr158af;dyrekcja@_8
+2;Wierzbicka;Anna;82031512345;2;501123456;a.wierzbicka@gmail.com;anna8203;Skrzat2025!
+3;Kaczmarek;Marta;85071254321;2;502234567;m.kaczmarek@gmail.com;marta850;Duszek85#
+4;Maj;Karolina;87092167890;2;503345678;k.maj@gmail.com;karo8709;Elfki2025@
+5;Sokołowska;Dorota;86010498765;2;504456789;d.sokolowska@gmail.com;doro8601;Elfy86$
+6;Nowak;Elżbieta;79081245678;2;505567890;e.nowak@gmail.com;elzb7908;Gnomy79&
+7;Kowalska;Julia;90010123456;3;506678901;j.kowalska@gmail.com;julia900;English90*
+8;Tomala;Agnieszka;88050534567;4;507789012;a.tomala@gmail.com;agni8805;Religia88!
+9;Zielińska;Monika;87030345678;5;508890123;m.zielinska@gmail.com;moni8703;Muzyka87#
+10;Bartosik;Paulina;91021467890;6;509901234;p.bartosik@gmail.com;pauli910;Pomoc91!

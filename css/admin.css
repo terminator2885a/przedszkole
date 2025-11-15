@@ -1,0 +1,121 @@
+:root{
+    --bg-primary: #7DD181;
+    --bg-secondary: #96E8BC;
+    --bg-tertiary: #B6F9C9;
+    --text: #4B7F52;
+
+    --input: #4d4d4d;
+}
+
+h3{
+    color: var(--text);
+}
+
+h4{
+    font-size: 18px;
+}
+
+.teacher-banner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teacher-banner__img{
+    width: 200px;
+    height: 200px;
+}
+
+
+.dropdown{
+    position: relative;
+}
+
+.dropdown ul{
+    width: 200px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    background: var(--bg-primary);
+    padding: 0;
+    list-style-type: none;
+    margin-top: 10px;
+    border-radius: 0 0 20px 20px;
+    display: none;
+}
+
+.dropdown ul li{
+    font-size: 22px;
+    padding: 15px;
+    border-radius: 20px;
+    color: #fff; 
+}
+
+.dropdown ul li:hover{
+    background-color: #fff;
+    a{
+        color: var(--text);
+    }
+}
+
+.dropdown:hover ul{
+    display: block;
+}
+
+
+.logout a{
+    color: #FF5C5C;
+}
+.logout:hover a{
+    color: #FF5C5C;
+}
+
+nav h3{
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.login-form{
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.login-form form label{
+    color: var(--input);
+    font-size: 20px;
+}
+
+.login-form form input{
+    width: 400px;
+    font-size: 20px;
+    border: none;
+    padding: 8px;
+    color: var(--input);
+    border-radius: 10px;
+    
+}
+
+.login-form form input::placeholder{
+    color: #B0B0B0;
+}
+
+.login-form form input[type="submit"]{
+    background-color: var(--text);
+    font-family: "Aclonica", sans-serif;
+    color: #fff;
+}
+
+.error{
+    color: #FF5C5C;
+    font-size: 18px;
+    text-align: center;
+}
