@@ -62,7 +62,6 @@
                 echo '</div>';
 
                 echo '<h3>' . $_SESSION['user']['f_name'] . ' ' . $_SESSION['user']['l_name'] . '</h3>';
-
                 switch($_SESSION['user']['rank']){
                     case 1:
                         echo '<h4>Dyrektor przedszkola</h4>';
@@ -75,24 +74,25 @@
                         break;
                 }
             ?>
+            <!-- <p><b style="color: red;">Ważne:</b> Strona przedszkola nie jest od zarządzania sprawami kadrowymi. Przedszkolny system oferuje zarządzanie grupami oraz przedszkolakami. Do spraw takich jak urlopy, zwolnienia, płace, należy skorzystać z innych narzędzi.</p> -->
         </div>
 
         <nav>
             <?php if($_SESSION['user']['rank'] == 1){ ?>
             <h3>Panel dyrektorski</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="">Grupy</a></div>
+                <div class="nav__link current"><a href="index.php">Grupy</a></div>
                 <div class="nav__link dropdown">
                     Przedszkolaki
                     <ul>
-                        <li><a href="">Przegląd</a></li>
+                        <li><a href="przedszkolaki.php">Przegląd</a></li>
                         <li><a href="">Dodaj</a></li>
                     </ul>
                 </div>
                 <div class="nav__link dropdown">
                     Nauczyciele
                     <ul>
-                        <li><a href="">Przegląd</a></li>
+                        <li><a href="nauczyciele.php">Przegląd</a></li>
                         <li><a href="">Dodaj</a></li>
                     </ul>
                 </div>
@@ -107,7 +107,7 @@
                 <div class="nav__link logout"><a href="logout.php">Wyloguj się</a></div>
             </div>
 
-            <?php
+             <?php
             } else if($_SESSION['user']['rank'] == 2){ 
             ?>
             <h3>Panel wychowawcy</h3>

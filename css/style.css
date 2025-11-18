@@ -77,18 +77,18 @@ nav a{
     text-decoration: none;
 }
 
-.nav__link, .aside__link{
+.nav__link, .aside__link, .data_show_hide{
     font-size: 22px;
     padding: 15px;
     border-radius: 20px;
 }
 
-.nav__link:hover, .current, .aside__link:hover{
+.nav__link:hover, .current, .aside__link:hover, .data_show_hide:hover{
     background-color: #fff;
     color: var(--text);
 }
 
-.nav__link:hover > a, .current > a, .aside__link:hover > a{
+.nav__link:hover > a, .current > a, .aside__link:hover > a, .data_show_hide:hover>a{
     color: var(--text);
 }
 

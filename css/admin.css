@@ -7,6 +7,10 @@
     --input: #4d4d4d;
 }
 
+.page{
+    width: 100%;
+}
+
 h3{
     color: var(--text);
 }
@@ -63,16 +67,52 @@ h4{
 }
 
 
-.logout a{
+.logout a, .remove a{
     color: #FF5C5C;
 }
 .logout:hover a{
+    background-color: #fff;
     color: #FF5C5C;
 }
 
 nav h3{
     color: #fff;
     letter-spacing: 2px;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+}
+
+main h2{
+    text-align: center;
+    color: var(--text);
+    padding: 15px;
+}
+
+.data_show_hide{
+    width:fit-content;
+    margin-bottom: 10px;
+
+    a{
+        color: var(--text);
+        width: 100%;
+        height: 100%;
+    }
+}
+
+main table{
+    font-family: 'Arial', sans-serif;
+    margin-left: 20px;
+    margin-right: 20px;
+    /* width: 100%; */
+}
+
+
+main table, main tr, main td, main th{
+    border: 1px solid black;
+    border-collapse: collapse;
 }
 
 .login-form{
