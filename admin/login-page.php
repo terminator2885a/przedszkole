@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="page">
@@ -22,12 +24,12 @@
             <h1>Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</h1>
         </header>
     
-        <div class="baner">
+        <!-- <div class="baner">
             <img src="../img/baner1.png" alt="">
-        </div>
+        </div> -->
         <nav style="align-items: start;">
             <div class="nav__link">
-                <a href="../index.html"><- Powrót do strony głównej</a>
+                <a href="../index.html"><i class="fa-solid fa-left-long"></i> Powrót do strony głównej</a>
             </div>
         </nav>
         <main class="login-form">
@@ -41,7 +43,7 @@
                 <?php 
                 if(isset($_SESSION['err'])){
                     echo '<span class="error">' . $_SESSION['err'] . '</span>';
-                } 
+                }
                 ?>
             </form>
         </main>

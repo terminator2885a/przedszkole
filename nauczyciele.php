@@ -1,9 +1,15 @@
-<!-- 
-    Template strony
-    W <title> strony znajduje się tytuł sekcji lub podsekcji, jeśli się znajduje (czyt: tytuł z <aside> jeśli jest, a jeśli nie ma to tytuł z <nav>)
-    Do linków prowadzących do sekcji i podsekcji, na której znajduje się użytkownik, należy dodać klasę current (zarówno <nav>, jak i <aside>)
-    No i oczywiście zapełnić część article: <h2> tytułem sekcji i podsekcji (jeśli jest) oraz treścią
--->
+<?php
+    require_once 'admin/functions.php';
+    require_once 'db/connect.php';
+
+    $conn = new mysqli($host, $user, $pass, $db);
+    mysqli_set_charset($conn, 'utf8mb4');
+    
+    $query1 = "SELECT id_nauczyciela, CONCAT(imie, ' ', nazwisko) AS imie_i_nazwisko, ranga FROM nauczyciele ORDER BY ranga, id_nauczyciela";
+
+    // $query2 = "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $_SESSION['user']['id'] . " OR wychowawca2=" . $_SESSION['user']['id'];
+
+?>
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -15,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Tytuł podsekcji (ew. tytuł sekcji) - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
+    <title>Nasze nauczycielki - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
 </head>
 <body>
     <div class="page">
@@ -25,7 +31,6 @@
         <div class="banner">
             <img src="img/baner1.png" alt="baner">
         </div>
-        <!-- Do linku z sekcją, na której znajduje się użytkownik, dodać klasę current -->
         <nav>
             <div class="nav__links">
                 <div class="nav__link current"><a href="index.html">O nas</a></div>
@@ -39,8 +44,7 @@
     
         <main>
             <aside>
-                <!-- Do linku z podsekcją, na której znajduje się użytkownik, dodać klasę current -->
-                <div class="aside__link"><a href="nauczyciele.php">Nasze nauczycielki</a></div>
+                <div class="aside__link current"><a href="nauczyciele.php">Nasze nauczycielki</a></div>
                 <div class="aside__link"><a href="plan_dnia.html">Rozkład dnia</a></div>
                 <div class="aside__link"><a href="rekrutacja.html">Rekrutacja</a></div>
                 <div class="aside__link"><a href="rodo.html">Ochrona danych osobowych</a></div>
@@ -48,9 +52,41 @@
                 <div class="aside__link"><a href="https://bip.gov.pl">Biuletyn informacji publicznej</a></div>
             </aside>
             <article>
-                <h2>Tytuł podsekcji</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt ligula rutrum quam mattis, id ultrices metus convallis. Sed elementum pretium enim sed aliquam. Suspendisse potenti. Etiam vehicula, diam vel bibendum gravida, nibh orci ornare ante, et consequat urna nulla at nibh. Quisque congue, mi tristique faucibus accumsan, libero ex vehicula augue, et auctor ex ex pretium risus. In hac habitasse platea dictumst. Donec ac neque tempor, mollis arcu ut, malesuada quam. Curabitur a eros venenatis, finibus nisl ut, facilisis felis. Aliquam lobortis risus non sem aliquam, a imperdiet nibh gravida.</p>
-                <p>Quisque lacinia mi et augue dictum maximus facilisis eget mi. Etiam vel tempor purus. Nam velit magna, volutpat a pulvinar id, pharetra lobortis odio. Maecenas tempus enim nec est aliquam, ultricies volutpat nibh eleifend. Donec erat leo, fringilla sed nunc in, elementum vulputate dui. Aliquam ac quam vel mauris laoreet efficitur at ac lorem. Donec pulvinar ante at ante posuere mattis. Suspendisse sit amet ex id nunc consectetur dignissim eu id mauris. Nam varius varius elit eu tincidunt. Nam vitae nisi ultrices, volutpat odio eu, venenatis lorem. Ut placerat diam vitae porta mollis. Quisque hendrerit mauris id neque interdum, eu egestas nisi mollis. Maecenas bibendum neque augue, tincidunt tincidunt libero pulvinar sed.</p>
+                <h2>Nasze nauczycielki</h2>
+                <?php
+                    $result1 = $conn->query($query1);
+                    $prev = 0;
+                    while($row = $result1->fetch_assoc()){
+                        if($row['ranga'] == 1){
+                            echo '<div class="teacher-banner">';
+                            echo '<div class="img teacher-banner__img">';
+                            echo '<img src="img/teachers/' . removePolishCharacters(strtolower(str_replace(' ', '_', $row['imie_i_nazwisko']) . '.jpg">'));
+                            echo '</div>';
+                            echo '<h4>' . $row['imie_i_nazwisko'] . '</h4>';
+                            echo '<h4>Dyrektor przedszkola</h4>';
+                            echo '</div>';
+                            $prev = 1;
+                        }else if($row['ranga']==2){
+                            if($prev == 1){
+                                $prev = 2;
+                                echo '<ul>';
+                            }
+                            $query2 = "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $row['id_nauczyciela'] . " OR wychowawca2=" . $row['id_nauczyciela'];
+                            $result2 = $conn->query($query2);
+                            $group_name = $result2->fetch_assoc()['nazwa_grupy'];
+                            echo '<li><span class="teacher__name">' . $row['imie_i_nazwisko'] . '</span> - wychowawca grupy ' . $group_name . '</li>';
+                        }else{
+                            if($prev == 2){
+                                $prev = 3;
+                            }
+                            $query3 = "SELECT nazwa_rangi FROM rangi WHERE id_rangi=". $row['ranga'];
+                            $result3 = $conn->query($query3);
+                            $rank_name = $result3->fetch_assoc()['nazwa_rangi'];
+                            echo '<li><span class="teacher__name">' . $row['imie_i_nazwisko'] . '</span> - '. $rank_name . '</li>';
+                        }
+                    }
+
+                ?>
             </article>
         </main>
         <footer>
@@ -72,3 +108,7 @@
     </div>
 </body>
 </html>
+
+<?php
+    $conn->close();
+?>

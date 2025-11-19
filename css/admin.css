@@ -19,17 +19,6 @@ h4{
     font-size: 18px;
 }
 
-.teacher-banner{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.teacher-banner__img{
-    width: 200px;
-    height: 200px;
-}
-
 
 .dropdown{
     position: relative;
@@ -85,10 +74,38 @@ main{
     flex-direction: column;
 }
 
-main h2{
+main h2, main h3{
     text-align: center;
     color: var(--text);
     padding: 15px;
+}
+
+.search_form{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    input, select, option{
+        font-size: 18px;
+        padding: 10px;
+        border: none;
+        border-radius: 20px;
+    }
+    input[type='text']{
+        width: 300px;
+    }
+
+    input[type='submit']{
+        background-color: var(--bg-primary);
+        color: #fff;
+        font-weight: bold;
+    }
+
+    input[type='submit']:hover{
+        background-color: #fff;
+        color: var(--text);
+    }
+    
 }
 
 .data_show_hide{

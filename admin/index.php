@@ -39,7 +39,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
-    <title>Panel dyrektorski - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Panel nauczyciela - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
 </head>
 <body>
     <div class="page">
@@ -104,7 +107,7 @@
                     </ul>
                 </div>
                 <div class="nav__link"><a href="">Wiadomości</a></div>
-                <div class="nav__link logout"><a href="logout.php">Wyloguj się</a></div>
+                <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
 
              <?php
@@ -113,10 +116,10 @@
             <h3>Panel wychowawcy</h3>
             <div class="nav__links">
                 <div class="nav__link current"><a href="">Moja grupa</a></div>
-                <div class="nav__link"><a href="">Moje przedszkolaki</a></div>
+                <div class="nav__link"><a href="przedszkolaki.php">Moje przedszkolaki</a></div>
                 <div class="nav__link"><a href="">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="">Wiadomości</a></div>
-                <div class="nav__link logout"><a href="logout.php">Wyloguj się</a></div>
+                <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
             <?php
             }else{
@@ -143,7 +146,7 @@
             <div class="nav__links">
                 <div class="nav__link"><a href="">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="">Wiadomości</a></div>
-                <div class="nav__link logout"><a href="logout.php">Wyloguj się</a></div>
+                <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
             <?php
             }
