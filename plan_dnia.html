@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/plan_dnia.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Rozkład dnia - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
+</head>
+
+<body>
+    <div class="page">
+        <header>
+            <h1>Niepubliczne przedszkole "Małe Skrzaty" w Łodzi</h1>
+        </header>
+        <div class="banner">
+            <img src="img/baner1.png" alt="baner">
+        </div>
+        <nav>
+            <div class="nav__links">
+                <div class="nav__link current"><a href="index.html">O nas</a></div>
+                <div class="nav__link"><a href="grupy.php">Grupy</a></div>
+                <div class="nav__link"><a href="wydarzenia.php">Wydarzenia</a></div>
+                <div class="nav__link"><a href="kalendarium.html">Kalendarium</a></div>
+                <div class="nav__link"><a href="rodzic.php">Kącik rodzica</a></div>
+                <div class="nav__link"><a href="admin/index.php">Panel nauczyciela</a></div>
+            </div>
+        </nav>
+
+        <main>
+            <aside>
+                <div class="aside__link"><a href="nauczyciele.php">Nasze nauczycielki</a></div>
+                <div class="aside__link current"><a href="plan_dnia.html">Rozkład dnia</a></div>
+                <div class="aside__link"><a href="rekrutacja.html">Rekrutacja</a></div>
+                <div class="aside__link"><a href="rodo.html">Ochrona danych osobowych</a></div>
+                <div class="aside__link"><a href="maloletni.html">Standardy ochrony małoletnich</a></div>
+                <div class="aside__link"><a href="https://bip.gov.pl">Biuletyn informacji publicznej</a></div>
+            </aside>
+            <article>
+                <h2>Rozkład dnia</h2>
+                <p>Poniżej prezentujemy harmonogram dnia w naszym przedszkolu. Regularne struktury i rutyny pomagają
+                    dzieciom czuć się bezpiecznie i wspierają ich rozwój. Każdy dzień pełen jest zabawy, nauki i
+                    interakcji z rówieśnikami.</p>
+
+                <!-- <table>
+                    <thead>
+                        <tr>
+                            <th><strong>Godzina</strong></th>
+                            <th><strong>Poniedziałek</strong></th>
+                            <th><strong>Wtorek</strong></th>
+                            <th><strong>Środa</strong></th>
+                            <th><strong>Czwartek</strong></th>
+                            <th><strong>Piątek</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>7:00 - 8:30</strong></td>
+                            <td>Przyjęcie dzieci, zabawy swobodne</td>
+                            <td>Przyjęcie dzieci, zabawy swobodne</td>
+                            <td>Przyjęcie dzieci, zabawy swobodne</td>
+                            <td>Przyjęcie dzieci, zabawy swobodne</td>
+                            <td>Przyjęcie dzieci, zabawy swobodne</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8:30 - 9:00</strong></td>
+                            <td>Poranna zbiórka, kalendarz</td>
+                            <td>Poranna zbiórka, kalendarz</td>
+                            <td>Poranna zbiórka, kalendarz</td>
+                            <td>Poranna zbiórka, kalendarz</td>
+                            <td>Poranna zbiórka, kalendarz</td>
+                        </tr>
+                        <tr>
+                            <td><strong>9:00 - 9:30</strong></td>
+                            <td>Śniadanie</td>
+                            <td>Śniadanie</td>
+                            <td>Śniadanie</td>
+                            <td>Śniadanie</td>
+                            <td>Śniadanie</td>
+                        </tr>
+                        <tr>
+                            <td><strong>9:30 - 10:45</strong></td>
+                            <td>Zajęcia edukacyjne - Matematyka</td>
+                            <td>Zajęcia edukacyjne - Język angielski</td>
+                            <td>Zajęcia edukacyjne - Plastyka</td>
+                            <td>Zajęcia edukacyjne - Muzyka</td>
+                            <td>Zajęcia edukacyjne - Przyroda</td>
+                        </tr>
+                        <tr>
+                            <td><strong>10:45 - 11:15</strong></td>
+                            <td>Zabawy na świeżym powietrzu</td>
+                            <td>Zabawy na świeżym powietrzu</td>
+                            <td>Zabawy na świeżym powietrzu</td>
+                            <td>Zabawy na świeżym powietrzu</td>
+                            <td>Zabawy na świeżym powietrzu</td>
+                        </tr>
+                        <tr>
+                            <td><strong>11:15 - 12:00</strong></td>
+                            <td>Zajęcia dodatkowe - Rytmika</td>
+                            <td>Zabawy ruchowe</td>
+                            <td>Zajęcia dodatkowe - Taniec</td>
+                            <td>Zabawy ruchowe</td>
+                            <td>Podsumowanie tygodnia</td>
+                        </tr>
+                        <tr>
+                            <td><strong>12:00 - 13:00</strong></td>
+                            <td>Obiad</td>
+                            <td>Obiad</td>
+                            <td>Obiad</td>
+                            <td>Obiad</td>
+                            <td>Obiad</td>
+                        </tr>
+                        <tr>
+                            <td><strong>13:00 - 15:00</strong></td>
+                            <td>Drzemka</td>
+                            <td>Drzemka</td>
+                            <td>Drzemka</td>
+                            <td>Drzemka</td>
+                            <td>Drzemka</td>
+                        </tr>
+                        <tr>
+                            <td><strong>15:00 - 15:30</strong></td>
+                            <td>Podwieczorek</td>
+                            <td>Podwieczorek</td>
+                            <td>Podwieczorek</td>
+                            <td>Podwieczorek</td>
+                            <td>Podwieczorek</td>
+                        </tr>
+                        <tr>
+                            <td><strong>15:30 - 17:00</strong></td>
+                            <td>Zabawy swobodne, zajęcia zgodne z zainteresowaniami</td>
+                            <td>Zabawy swobodne, zajęcia zgodne z zainteresowaniami</td>
+                            <td>Zabawy swobodne, zajęcia zgodne z zainteresowaniami</td>
+                            <td>Zabawy swobodne, zajęcia zgodne z zainteresowaniami</td>
+                            <td>Zabawy swobodne, zajęcia zgodne z zainteresowaniami</td>
+                        </tr>
+                        <tr>
+                            <td><strong>17:00 - 18:00</strong></td>
+                            <td>Odbór dzieci</td>
+                            <td>Odbór dzieci</td>
+                            <td>Odbór dzieci</td>
+                            <td>Odbór dzieci</td>
+                            <td>Odbór dzieci</td>
+                        </tr>
+                    </tbody>
+                </table> -->
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Godzina</th>
+                            <th>Poniedziałek</th>
+                            <th>Wtorek</th>
+                            <th>Środa</th>
+                            <th>Czwartek</th>
+                            <th>Piątek</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>7:30-8:30</td>
+                            <td colspan="5">Przyjęcie dzieci, swobodna zabawa</td>
+                        </tr>
+                        <tr>
+                            <td>8:30-8:45</td>
+                            <td colspan="5">Poranne powitanie, krąg</td>
+                        </tr>
+                        <tr>
+                            <td>8:45-9:15</td>
+                            <td colspan="5">Śniadanie</td>
+                        </tr>
+                        <tr>
+                            <td>9:15-10:00</td>
+                            <td colspan="5">Zabawy swobodne</td>
+                        </tr>
+                        <tr>
+                            <td>10:00-10:45</td>
+                            <td>Zajęcia adaptacyjne</td>
+                            <td>Język angielski</td>
+                            <td>Rytmika i taniec</td>
+                            <td>Warsztaty plastyczne</td>
+                            <td>Warsztaty teatralne</td>
+                        </tr>
+                        <tr>
+                            <td>10:45-11:15</td>
+                            <td colspan="5">Owocowa przerwa</td>
+                        </tr>
+                        <tr>
+                            <td>11:15-12:00</td>
+                            <td colspan="5">Ogród i plac zabaw (w zimę zabawy w sali lub gimnastyka)</td>
+                        </tr>
+                        <tr>
+                            <td>12:00-12:30</td>
+                            <td colspan="5">Obiad</td>
+                        </tr>
+                        <tr>
+                            <td>12:30-13:15</td>
+                            <td colspan="5">Drzemka (młodsi) / ciche aktywności (starszaki)</td>
+                        </tr>
+                        <tr>
+                            <td>13:15-14:00</td>
+                            <td>Zabawy kierowane</td>
+                            <td>Projekty językowe i kulturowe</td>
+                            <td>Religia lub zabawy swodobne</td>
+                            <td>Zajęcia rozwijające samodzielność</td>
+                            <td>Teatrzyk piątkowy</td>
+                        </tr>
+                        <tr>
+                            <td>14:00-14:30</td>
+                            <td colspan="5">Podwieczorek</td>
+                        </tr>
+
+                        <tr>
+                            <td>14:30-15:00</td>
+                            <td colspan="5">Relaksacja i czytanie</td>
+                        </tr>
+                        <tr>
+                            <td>15:00-16:30</td>
+                            <td colspan="5">Swobodna zabawa, odbiór dzieci</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <h4>Uwagi dodatkowe</h4>
+                <ul>
+                    <li>Godziny mogą ulegać drobnym zmianom w zależności od pory roku i potrzeb grupy.</li>
+                    <li>Zajęcia edukacyjne dostosowane są do wieku i możliwości rozwojowych dzieci.</li>
+                    <li>Zabawy na świeżym powietrzu odbywają się codziennie, jeśli warunki pogodowe na to pozwalają.
+                    </li>
+                    <li>Zastosowujemy elastyczną strukturę dnia, reagując na zainteresowania i potrzeby dzieci.</li>
+                    <li>Każde dziecko otrzymuje zdrowe, domowe posiłki przygotowywane w naszej kuchni.</li>
+                </ul>
+            </article>
+        </main>
+        <footer>
+            <table>
+                <tr>
+                    <th>Adres</th>
+                    <th>Kontakt</th>
+                    <th>Mapa</th>
+                </tr>
+                <tr>
+                    <td>ul. Wesoła 12</td>
+                    <td>E-mail: <a href="mailto:kontakt@maleskrzaty.pl">kontakt@maleskrzaty.pl</a></td>
+                    <td rowspan="2">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d733.6564960265912!2d19.482710198832795!3d51.79308105045472!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471bcb1cb30d33df%3A0x3bddd46b3ba43f17!2sPrzedszkole%20nr%209%20Miejskie!5e0!3m2!1spl!2spl!4v1762619710896!5m2!1spl!2spl"
+                            width="150" height="112" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </td>
+                </tr>
+                <tr>
+                    <td>93-152 Łódź</td>
+                    <td>Tel.: <a href="tel:426784532">42 678 45 32</a></td>
+                </tr>
+            </table>
+        </footer>
+    </div>
+</body>
+
+</html>

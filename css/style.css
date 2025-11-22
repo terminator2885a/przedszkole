@@ -94,7 +94,7 @@ nav a{
 
 main{
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
 }
 
 aside{
@@ -138,7 +138,7 @@ article{
         font-size: 40px;
     }
     
-    p, span, li{
+    p, span, li, figcaption{
         color: #000;
         font-size: 20px;
         font-family: Arial, Helvetica, sans-serif;
@@ -177,6 +177,11 @@ article{
     }
     li::marker{
         color: var(--text);
+    }
+
+    .figures{
+        display: flex;
+        gap: 20px;
     }
 }
 
