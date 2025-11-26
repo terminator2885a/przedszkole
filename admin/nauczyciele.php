@@ -52,24 +52,24 @@
                     Przedszkolaki
                     <ul>
                         <li><a href="przedszkolaki.php">Przegląd</a></li>
-                        <li><a href="">Dodaj</a></li>
+                        <li><a href="dodaj-przedszkolaka.php">Dodaj</a></li>
                     </ul>
                 </div>
                 <div class="nav__link dropdown current">
                     Nauczyciele
                     <ul>
                         <li class="current"><a href="nauczyciele.php">Przegląd</a></li>
-                        <li><a href="">Dodaj</a></li>
+                        <li><a href="dodaj-nauczyciela.php">Dodaj</a></li>
                     </ul>
                 </div>
                 <div class="nav__link dropdown">
                     Wpisy
                     <ul>
-                        <li><a href="">Nowy artykuł</a></li>
-                        <li><a href="">Nowy komunikat</a></li>
+                        <li><a href="artykul.php">Nowy artykuł</a></li>
+                        <li><a href="komunikat.php">Nowy komunikat</a></li>
                     </ul>
                 </div>
-                <div class="nav__link"><a href="">Wiadomości</a></div>
+                <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link logout"><a href="logout.php">Wyloguj się</a></div>
             </div>
         </nav>
