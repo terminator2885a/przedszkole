@@ -1,30 +1,15 @@
 <?php
     session_start();
     if(!isset($_SESSION['user'])) {header('Location: login-page.php'); exit();}
+    // if($_SESSION['user']['rank'] != 1) {echo '<script>alert("Nie masz uprawnień");</script>'; header('Location: index.php'); exit();}
 
 
-    // print_r($_SESSION['user']);
-    // Nazwa roli
+    if($_SESSION['user']['rank']!=1) {header('Location: edytuj-artykul.php'); exit();}
+
     require_once '../db/connect.php';
     $conn = new mysqli($host, $user, $pass, $db);
     mysqli_set_charset($conn, 'utf8mb4');
 
-    $result = $conn->query('SELECT nazwa_rangi FROM rangi WHERE id_rangi='. $_SESSION['user']['rank']);
-    $row = $result->fetch_assoc();
-    $_SESSION['user']['rank_name'] = $row['nazwa_rangi'];
-    $result->free_result();
-
-    if($_SESSION['user']['rank'] == 2){
-        $query = //sprintf("SELECT nazwa_grupy FROM grupy WHERE wychowawca1='%s' OR wychowawca2='%s'", $_SESSION['user']['id'], $_SESSION['user']['id']);
-        "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $_SESSION['user']['id'] . " OR wychowawca2=" . $_SESSION['user']['id'];
-
-        $result = $conn->query($query);
-        $row = $result->fetch_assoc();
-        $_SESSION['group_name'] = $row['nazwa_grupy'];
-
-        $result->free_result();
-
-    }
 ?>
 
 <!DOCTYPE html>
@@ -35,14 +20,18 @@
 
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/articles.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <title>Panel nauczyciela - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
+    <?php if($_SESSION['user']['rank']==1) {?>
+    <title>Artykuły - Dyrektor w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
+    <?php } else if($_SESSION['user']['rank']==2){ ?>
+    <title>Dodaj artykuł - Wychowawca w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
+    <?php }else{ ?>
+    <title>Dodaj artykuł - Nauczyciel w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
+    <?php } ?>
 </head>
 <body>
     <div class="page">
@@ -51,12 +40,6 @@
         </header>
     
         <div class="teacher-banner">
-            <!-- <div class="img teacher-banner__img">
-                <img src="../img/teacher.jpg" alt="">
-            </div>
-    
-            <h3>Joanna Zawadzka</h3>
-            <h4>Dyrektor przedszkola</h4> -->
 
             <?php
                 require_once 'functions.php';
@@ -77,14 +60,13 @@
                         break;
                 }
             ?>
-            <!-- <p><b style="color: red;">Ważne:</b> Strona przedszkola nie jest od zarządzania sprawami kadrowymi. Przedszkolny system oferuje zarządzanie grupami oraz przedszkolakami. Do spraw takich jak urlopy, zwolnienia, płace, należy skorzystać z innych narzędzi.</p> -->
         </div>
 
         <nav>
             <?php if($_SESSION['user']['rank'] == 1){ ?>
             <h3>Panel dyrektorski</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="index.php">Grupy</a></div>
+                <div class="nav__link"><a href="index.php">Grupy</a></div>
                 <div class="nav__link dropdown">
                     Przedszkolaki
                     <ul>
@@ -99,10 +81,10 @@
                         <li><a href="dodaj-nauczyciela.php">Dodaj</a></li>
                     </ul>
                 </div>
-                <div class="nav__link dropdown">
+                <div class="nav__link dropdown current">
                     Wpisy
                     <ul>
-                        <li><a href="artykul.php">Artykuły</a></li>
+                        <li class="current"><a href="artykul.php">Artykuły</a></li>
                         <li><a href="komunikat.php">Komunikaty</a></li>
                     </ul>
                 </div>
@@ -115,9 +97,9 @@
             ?>
             <h3>Panel wychowawcy</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="index.php">Moja grupa</a></div>
+                <div class="nav__link"><a href="index.php">Moja grupa</a></div>
                 <div class="nav__link"><a href="przedszkolaki.php">Moje przedszkolaki</a></div>
-                <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
+                <div class="nav__link current"><a href="artykul.php">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
@@ -144,7 +126,7 @@
             </h3>
 
             <div class="nav__links">
-                <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
+                <div class="nav__link current"><a href="artykul.php">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
@@ -152,6 +134,50 @@
             }
             ?>
         </nav>
+
+        <main>
+            <h2>Dodaj artykuł</h2>
+
+            <!-- <div class="articles">
+                <div class="input">
+                    <textarea>Przykładowy tekst artykułu.</textarea>
+                    <button id="article-show-preview">Zobacz podgląd</button>
+                </div>
+                <form action="add-article.php" class="previev" method="post">
+                    <textarea name="article-content" id="article-preview" disabled></textarea>
+                    <input type="submit" value="Dodaj artykuł">
+                </form>
+            </div>
+
+            <?php
+                $query = "SELECT id_artykulu, CONCAT(imie,' ',nazwisko) AS autor, tytul_artykulu FROM artykuly JOIN nauczyciele ON artykuly.autor_artykulu = nauczyciele.id_nauczyciela";
+                $result = $conn->query($query);
+            ?> -->
+            <h2>Zarządzaj artykułami</h2>
+            <table id="articles__table">
+                <tr>
+                    <th>ID</th>
+                    <th>Autor</th>
+                    <th>Tytuł</th>
+                    <th>Edytuj artykuł</th>
+                    <th>Usuń artykuł</th>
+                </tr>
+                
+                <?php
+                    while($row = $result->fetch_assoc()){
+                        echo '<tr>';
+                        echo '<td>' . $row['id_artykulu'] . '</td>';
+                        echo '<td>' . $row['autor'] . '</td>';
+                        echo '<td>' . $row['tytul_artykulu'] . '</td>';
+                        echo '<td class="edit"><a href="edytuj-artykul.php?article_id=' . $row['id_artykulu'] . '">Edytuj artykuł</a>';
+                        echo '<td class="remove"><a href="remove-article.php?article_id=' . $row['id_artykulu'] . '">Usuń artykuł</a>';
+                        echo '</tr>';
+                    }
+                ?>
+
+            </table>
+        </main>
+
     </div>
 </body>
 </html>

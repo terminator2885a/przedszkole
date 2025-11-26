@@ -65,8 +65,8 @@
                 <div class="nav__link dropdown">
                     Wpisy
                     <ul>
-                        <li><a href="artykul.php">Nowy artykuł</a></li>
-                        <li><a href="komunikat.php">Nowy komunikat</a></li>
+                        <li><a href="artykul.php">Artykuły</a></li>
+                        <li><a href="komunikat.php">Komunikaty</a></li>
                     </ul>
                 </div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>

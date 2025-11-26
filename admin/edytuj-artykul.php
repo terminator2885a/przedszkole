@@ -1,30 +1,18 @@
 <?php
     session_start();
     if(!isset($_SESSION['user'])) {header('Location: login-page.php'); exit();}
+    // if($_SESSION['user']['rank'] != 1) {echo '<script>alert("Nie masz uprawnień");</script>'; header('Location: index.php'); exit();}
 
-
-    // print_r($_SESSION['user']);
-    // Nazwa roli
     require_once '../db/connect.php';
     $conn = new mysqli($host, $user, $pass, $db);
     mysqli_set_charset($conn, 'utf8mb4');
 
-    $result = $conn->query('SELECT nazwa_rangi FROM rangi WHERE id_rangi='. $_SESSION['user']['rank']);
-    $row = $result->fetch_assoc();
-    $_SESSION['user']['rank_name'] = $row['nazwa_rangi'];
-    $result->free_result();
-
-    if($_SESSION['user']['rank'] == 2){
-        $query = //sprintf("SELECT nazwa_grupy FROM grupy WHERE wychowawca1='%s' OR wychowawca2='%s'", $_SESSION['user']['id'], $_SESSION['user']['id']);
-        "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $_SESSION['user']['id'] . " OR wychowawca2=" . $_SESSION['user']['id'];
-
-        $result = $conn->query($query);
-        $row = $result->fetch_assoc();
-        $_SESSION['group_name'] = $row['nazwa_grupy'];
-
-        $result->free_result();
-
+    $edit = false;
+    if(isset($_GET['article-id'])){
+        $edit = true;
+        $article_id = $_GET['article-id'];
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -35,14 +23,20 @@
 
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/articles.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+    <?php if($_SESSION['user']['rank']==1) {?>
+    <title>Artykuły - Dyrektor w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
+    <?php } else if($_SESSION['user']['rank']==2){ ?>
+    <title>Dodaj artykuł - Wychowawca w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
+    <?php }else{ ?>
+    <title>Dodaj artykuł - Nauczyciel w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
+    <?php } ?>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <title>Panel nauczyciela - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
+    <script src="../js/article.js" type="module" defer></script>
 </head>
 <body>
     <div class="page">
@@ -51,12 +45,6 @@
         </header>
     
         <div class="teacher-banner">
-            <!-- <div class="img teacher-banner__img">
-                <img src="../img/teacher.jpg" alt="">
-            </div>
-    
-            <h3>Joanna Zawadzka</h3>
-            <h4>Dyrektor przedszkola</h4> -->
 
             <?php
                 require_once 'functions.php';
@@ -77,14 +65,13 @@
                         break;
                 }
             ?>
-            <!-- <p><b style="color: red;">Ważne:</b> Strona przedszkola nie jest od zarządzania sprawami kadrowymi. Przedszkolny system oferuje zarządzanie grupami oraz przedszkolakami. Do spraw takich jak urlopy, zwolnienia, płace, należy skorzystać z innych narzędzi.</p> -->
         </div>
 
         <nav>
             <?php if($_SESSION['user']['rank'] == 1){ ?>
             <h3>Panel dyrektorski</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="index.php">Grupy</a></div>
+                <div class="nav__link"><a href="index.php">Grupy</a></div>
                 <div class="nav__link dropdown">
                     Przedszkolaki
                     <ul>
@@ -99,10 +86,10 @@
                         <li><a href="dodaj-nauczyciela.php">Dodaj</a></li>
                     </ul>
                 </div>
-                <div class="nav__link dropdown">
+                <div class="nav__link dropdown current">
                     Wpisy
                     <ul>
-                        <li><a href="artykul.php">Artykuły</a></li>
+                        <li class="current"><a href="artykul.php">Artykuły</a></li>
                         <li><a href="komunikat.php">Komunikaty</a></li>
                     </ul>
                 </div>
@@ -115,9 +102,9 @@
             ?>
             <h3>Panel wychowawcy</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="index.php">Moja grupa</a></div>
+                <div class="nav__link"><a href="index.php">Moja grupa</a></div>
                 <div class="nav__link"><a href="przedszkolaki.php">Moje przedszkolaki</a></div>
-                <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
+                <div class="nav__link current"><a href="artykul.php">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
@@ -144,7 +131,7 @@
             </h3>
 
             <div class="nav__links">
-                <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
+                <div class="nav__link current"><a href="artykul.php">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
@@ -152,6 +139,46 @@
             }
             ?>
         </nav>
+
+        <main>
+            <h2>Dodaj/edytuj artykuł</h2>
+
+            <div class="articles">
+                <div class="input">
+                    <button id="article-show-preview">Zobacz podgląd</button>
+                    <textarea id="article-content"><?php
+                        if($edit){
+                            $query = "SELECT tresc_artykulu FROM artykuly WHERE id_artykulu=" . $article_id;
+                            $result = $conn->query($query);
+                            $row = $result->fetch_assoc();
+                            echo $row['tresc_artykulu'];
+                        }else{
+                            ?>
+Tytuł artykułu
+-----------------------
+
+### Podtytuł 1
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus molestie et dui eu imperdiet. Nullam.
+
+### Podtytuł 2
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus molestie et dui eu imperdiet. Nullam.
+                            <?php
+                        }
+                    ?></textarea>
+                </div>
+                <form <?php 
+                if($edit) echo 'action="add-article.php?article-id=' . $article_id . '"'; 
+                else echo 'action="add-article.php"';
+                 ?> class="previev" method="post">
+                    <input type="submit" value="Zapisz zmiany" id="save-changes">
+                    <div id="article-preview"></div>
+                    <textarea name="article-content" id="hidden-article-preview" style="display:none;"></textarea>
+                </form>
+            </div>
+        </main>
+
     </div>
 </body>
 </html>
