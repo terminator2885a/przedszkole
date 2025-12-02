@@ -15,35 +15,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = htmlspecialchars($_POST['imie'] ?? '');
     $last_name = htmlspecialchars($_POST['nazwisko'] ?? '');
     $pesel = htmlspecialchars($_POST['pesel'] ?? '');
-    $imie_mamy = htmlspecialchars($_POST['imie_mamy'] ?? '');
-    $nazwisko_mamy = htmlspecialchars($_POST['nazwisko_mamy'] ?? '');
-    $imie_taty = htmlspecialchars($_POST['imie_taty'] ?? '');
-    $nazwisko_taty = htmlspecialchars($_POST['nazwisko_taty'] ?? '');
-    $nr_telefonu_mamy = htmlspecialchars($_POST['nr_telefonu_mamy'] ?? '');
-    $nr_telefonu_taty = htmlspecialchars($_POST['nr_telefonu_taty'] ?? '');
-    $email_mamy = htmlspecialchars($_POST['email_mamy'] ?? '');
-    $email_taty = htmlspecialchars($_POST['email_taty'] ?? '');
+    $imiona_rodzicow = htmlspecialchars($_POST['imiona_rodzicow'] ?? '');
+    $nr_telefonu = htmlspecialchars($_POST['nr_telefonu'] ?? '');
+    $e_mail = htmlspecialchars($_POST['e_mail'] ?? '');
+    $alergeny = htmlspecialchars($_POST['alergeny'] ?? '');
+    $religia = isset($_POST['religia']) ? 1 : 0;
+    
+    require_once 'admin/functions.php';
 
     if (empty($first_name) || empty($last_name) || empty($pesel)) {
         $error = "Proszę wypełnić wszystkie wymagane pola (imię, nazwisko, PESEL).";
-    } else {
+    } elseif (!validatePesel($pesel) || is_null(birthDate($pesel))){
+        $error = "Niepoprawny numer PESEL.";
+    } elseif(getAge(birthDate($pesel)) < 3 || getAge(birthDate($pesel)) > 6) {
+        $error = "Wiek dziecka nie mieści się w zakresie od 3 do 6 lat.";
+    }
+    else {
         $generated_login = strtolower($first_name[0] . $last_name);
         $login_counter = 1;
         $original_login = $generated_login;
         
-        while ($conn->query("SELECT * FROM przedszkolaki WHERE login='$generated_login'")->num_rows > 0) {
-            $generated_login = $original_login . $login_counter;
-            $login_counter++;
+        $check_query = "SELECT id_przedszkolaka FROM przedszkolaki WHERE login = ?";
+        $check_stmt = $conn->prepare($check_query);
+        
+        while (true) {
+            $check_stmt->bind_param("s", $generated_login);
+            $check_stmt->execute();
+            $check_result = $check_stmt->get_result();
+            
+            if ($check_result->num_rows > 0) {
+                $generated_login = $original_login . $login_counter;
+                $login_counter++;
+            } else {
+                break;
+            }
+        }
+        $check_stmt->close();
+        $generated_password = generatePassword();
+        
+        $birth_date = birthDate($pesel);
+        $age = getAge($birth_date);
+        
+        if ($age === 3) {
+            $generated_group = 1;
+        } elseif ($age >= 4 && $age <= 5) {
+            $generated_group = 2;
+        } elseif ($age === 6) {
+            $generated_group = 3;
+        } else {
+            $generated_group = 1;
         }
         
-        $generated_password = bin2hex(random_bytes(8));
-        
-        $query_groups = "SELECT id_grupy FROM grupy LIMIT 1";
-        $result_groups = $conn->query($query_groups);
-        $group_row = $result_groups->fetch_assoc();
-        $generated_group = $group_row['id_grupy'] ?? 1;
-        
-        $query = "INSERT INTO przedszkolaki (imie, nazwisko, pesel, imie_mamy, nazwisko_mamy, imie_taty, nazwisko_taty, nr_telefonu_mamy, nr_telefonu_taty, email_mamy, email_taty, login, password, grupa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO przedszkolaki (imie, nazwisko, pesel, imiona_rodzicow, nr_telefonu, e_mail, alergeny, religia, login, password, grupa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $conn->prepare($query);
         if ($stmt === false) {
@@ -52,25 +75,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashed_password = password_hash($generated_password, PASSWORD_DEFAULT);
             
             $stmt->bind_param(
-                "sssssssssssssi",
+                "sssssssisss",
                 $first_name,
                 $last_name,
                 $pesel,
-                $imie_mamy,
-                $nazwisko_mamy,
-                $imie_taty,
-                $nazwisko_taty,
-                $nr_telefonu_mamy,
-                $nr_telefonu_taty,
-                $email_mamy,
-                $email_taty,
+                $imiona_rodzicow,
+                $nr_telefonu,
+                $e_mail,
+                $alergeny,
+                $religia,
                 $generated_login,
                 $hashed_password,
                 $generated_group
             );
             
             if ($stmt->execute()) {
-                $success = "Dziecko zostało pomyślnie zarejestrowane!<br>Login: <strong>$generated_login</strong><br>Hasło tymczasowe: <strong>$generated_password</strong>";
+                $group_name = $conn->query(sprintf("SELECT nazwa_grupy FROM grupy WHERE id_grupy = %d", $generated_group))->fetch_assoc()['nazwa_grupy'];
+                $success = "Dziecko zostało pomyślnie zarejestrowane!<br>Login: <strong>$generated_login</strong><br>Hasło tymczasowe: <strong>$generated_password</strong><br>
+                Na podstawie wieku dziecko zostało automatycznie przydzielone do grupy
+                <strong>$group_name</strong>";
+                $form_submitted = true;
             } else {
                 $error = "Błąd podczas rejestracji: " . $stmt->error;
             }
@@ -210,7 +234,7 @@ $conn->close();
                 <?php endif; ?>
 
                 <div class="form-container">
-                    <form method="POST" action="rekrutacja_form.php">
+                    <form method="POST" action="rekrutacja_form.php" id="recruitment-form">
                         <h3>Dane Dziecka</h3>
                         
                         <div class="form-row">
@@ -231,51 +255,44 @@ $conn->close();
                             </div>
                         </div>
 
-                        <h3>Dane Matki</h3>
+                        <h3>Dane Rodziców/Opiekunów</h3>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="imie_mamy">Imię</label>
-                                <input type="text" id="imie_mamy" name="imie_mamy">
-                            </div>
-                            <div class="form-group">
-                                <label for="nazwisko_mamy">Nazwisko</label>
-                                <input type="text" id="nazwisko_mamy" name="nazwisko_mamy">
+                                <label for="imiona_rodzicow">Imiona i nazwiska rodziców/opiekunów</label>
+                                <input type="text" id="imiona_rodzicow" name="imiona_rodzicow" placeholder="np. Jan Kowalski, Maria Kowalska" required>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="nr_telefonu_mamy">Numer telefonu</label>
-                                <input type="tel" id="nr_telefonu_mamy" name="nr_telefonu_mamy">
+                                <label for="nr_telefonu">Numer telefonu kontaktowy</label>
+                                <input type="tel" id="nr_telefonu" name="nr_telefonu" required pattern="[0-9]{9}|\([0-9]{3}\)[0-9]{7}|[0-9]{3}-[0-9]{3}-[0-9]{3}">
                             </div>
                             <div class="form-group">
-                                <label for="email_mamy">Adres e-mail</label>
-                                <input type="email" id="email_mamy" name="email_mamy">
+                                <label for="e_mail">Adres e-mail</label>
+                                <input type="email" id="e_mail" name="e_mail" required>
                             </div>
                         </div>
 
-                        <h3>Dane Ojca</h3>
-                        
+                        <h3>Informacje Dodatkowe</h3>
+
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="imie_taty">Imię</label>
-                                <input type="text" id="imie_taty" name="imie_taty">
-                            </div>
-                            <div class="form-group">
-                                <label for="nazwisko_taty">Nazwisko</label>
-                                <input type="text" id="nazwisko_taty" name="nazwisko_taty">
+                                <label for="alergeny">Alergeny, nietolerancje, specjalne wskazania dietetyczne</label>
+                                <textarea id="alergeny" name="alergeny" placeholder="np. alergia na mleko, nietolerancja glutenu"></textarea>
                             </div>
                         </div>
 
                         <div class="form-row">
+                            <!-- <div class="form-group">
+                                <label for="dlug">Liczba dni obecności w tygodniu</label>
+                                <input type="number" id="dlug" name="dlug" min="1" max="5" placeholder="1-5 dni" value="5">
+                            </div> -->
                             <div class="form-group">
-                                <label for="nr_telefonu_taty">Numer telefonu</label>
-                                <input type="tel" id="nr_telefonu_taty" name="nr_telefonu_taty">
-                            </div>
-                            <div class="form-group">
-                                <label for="email_taty">Adres e-mail</label>
-                                <input type="email" id="email_taty" name="email_taty">
+                                <label for="religia">
+                                    <input type="checkbox" id="religia" name="religia"> Dziecko uczestniczy w zajęciach religii
+                                </label>
                             </div>
                         </div>
 
@@ -303,5 +320,11 @@ $conn->close();
             </table>
         </footer>
     </div>
+
+    <script>
+        <?php if (!empty($success)): ?>
+        document.getElementById('recruitment-form').reset();
+        <?php endif; ?>
+    </script>
 </body>
 </html>

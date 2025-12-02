@@ -29,7 +29,7 @@
         else{
             $query = sprintf("INSERT INTO artykuly (autor_artykulu, tytul_artykulu, tresc_artykulu) VALUES (%d, '%s', '%s')", $_SESSION['user']['id'], $article_title, $article_content);
             $conn->query($query);
-            $article_id = $conn->query("SELECT id_artykulu FROM artykuly ORDER BY id_artykulu ASC LIMIT 1")->fetch_assoc()['id_artykulu'];
+            $article_id = $conn->query("SELECT id_artykulu FROM artykuly ORDER BY id_artykulu DESC LIMIT 1")->fetch_assoc()['id_artykulu'];
         }
 
 

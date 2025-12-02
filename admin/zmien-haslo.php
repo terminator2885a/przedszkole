@@ -26,10 +26,23 @@
 
     }
 
-    if($_SESSION['user']['rank'] == 1){
-        header('Location: przeglad-grup.php');
-        exit();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $row = $conn->query("SELECT * FROM nauczyciele WHERE id_nauczyciela=". $_SESSION['user']['id'])->fetch_assoc();
+
+        if(password_verify($_POST['old_password'], $row['password'])){
+            if($_POST['new_password1'] == $_POST['new_password2']){
+                $hashedPassword = password_hash($_POST['new_password1'], PASSWORD_DEFAULT);
+                $conn->query("UPDATE nauczyciele SET password='$hashedPassword' WHERE id_nauczyciela=".$_SESSION['user']['id']);
+                $success = "Hasło zostało zmienione";
+            }else{
+                $error = "Hasła nie są takie same";
+            }
+        } else{
+            $error = "Niepoprawne stare hasło";
+        }
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -37,17 +50,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Zmień hasło - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
 
-    <title>Panel nauczyciela - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
+    <style>
+        .login-form{
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .login-form form{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .login-form form label{
+            color: var(--input);
+            font-size: 20px;
+        }
+
+        .login-form form input, .login-form form button{
+            width: 400px;
+            font-size: 20px;
+            border: none;
+            padding: 8px;
+            color: var(--input);
+            border-radius: 10px;
+            
+        }
+
+        .login-form form input::placeholder{
+            color: #B0B0B0;
+        }
+
+        .login-form form button[type="submit"]{
+            background-color: var(--text);
+            font-family: "Aclonica", sans-serif;
+            color: #fff;
+        }
+
+        .error-message {
+            display: block;
+            background-color: #ffcccc;
+            color: #c00;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c00;
+        }
+        .success-message {
+            display: block;
+            background-color: #ccffcc;
+            color: #060;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #060;
+        }
+    </style>
+
 </head>
 <body>
     <div class="page">
@@ -89,7 +159,7 @@
             <?php if($_SESSION['user']['rank'] == 1){ ?>
             <h3>Panel dyrektorski</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="index.php">Grupy</a></div>
+                <div class="nav__link"><a href="index.php">Grupy</a></div>
                 <div class="nav__link dropdown">
                     Przedszkolaki
                     <ul>
@@ -112,7 +182,7 @@
                     </ul>
                 </div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
-                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
+                <div class="nav__link current"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
 
@@ -160,6 +230,33 @@
             }
             ?>
         </nav>
+    
+        <main>
+            <h2>Zmień hasło</h2>
+            <div class="login-form">
+                <form method="post">
+                    <label for="old-password">Stare hasło:</label>
+                    <input type="password" id="old-password" name="old_password">
+                    <label for="new-password1">Nowe hasło:</label>
+                    <input type="password" id="new-password1" name="new_password1">
+                    <label for="new-password2">Powtórz nowe hasło:</label>
+                    <input type="password" id="new-password2" name="new_password2">
+                    <button type="submit" name="change_password">Zmień hasło</button>
+                </form>
+            </div>
+            
+            <?php
+                if (isset($error)){
+                    echo "<span class='error-message'>$error</span>";
+                    unset($error);
+                }
+
+                if(isset($success)){
+                    echo "<span class='success-message'>$success</span>";
+                    unset($success);
+                }
+            ?>
+        </main>
     </div>
 </body>
 </html>

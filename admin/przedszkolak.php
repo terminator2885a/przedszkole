@@ -1,7 +1,7 @@
 <?php
     session_start();
     if(!isset($_SESSION['user'])) {header('Location: login-page.php'); exit();}
-
+    if($_SESSION['user']['rank'] != 1 && $_SESSION['user']['rank'] != 2) {echo '<script>alert("Nie masz uprawnień");</script>'; header('Location: index.php'); exit();}
 
     // print_r($_SESSION['user']);
     // Nazwa roli
@@ -26,9 +26,11 @@
 
     }
 
-    if($_SESSION['user']['rank'] == 1){
-        header('Location: przeglad-grup.php');
-        exit();
+    if(isset($_GET['id'])){
+        $preschooler_id = $_GET['id'];
+        $query = sprintf("SELECT * FROM przedszkolaki WHERE id_przedszkolaka=%d", $preschooler_id);
+        $result = $conn->query($query);
+        $preschooler = $result->fetch_assoc();
     }
 ?>
 
@@ -70,6 +72,7 @@
                 echo '</div>';
 
                 echo '<h3>' . $_SESSION['user']['f_name'] . ' ' . $_SESSION['user']['l_name'] . '</h3>';
+
                 switch($_SESSION['user']['rank']){
                     case 1:
                         echo '<h4>Dyrektor przedszkola</h4>';
@@ -89,11 +92,11 @@
             <?php if($_SESSION['user']['rank'] == 1){ ?>
             <h3>Panel dyrektorski</h3>
             <div class="nav__links">
-                <div class="nav__link current"><a href="index.php">Grupy</a></div>
-                <div class="nav__link dropdown">
+                <div class="nav__link"><a href="index.php">Grupy</a></div>
+                <div class="nav__link dropdown current">
                     Przedszkolaki
                     <ul>
-                        <li><a href="przedszkolaki.php">Przegląd</a></li>
+                        <li class="current"><a href="przedszkolaki.php">Przegląd</a></li>
                         <li><a href="edytuj-przedszkolaka.php">Dodaj</a></li>
                     </ul>
                 </div>
@@ -128,38 +131,34 @@
                 <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
-            <?php
-            }else{
-            ?>
-            <h3>
-                <?php
-                    switch ($_SESSION['user']['rank']){
-                        case 3:
-                            echo 'Panel nauczyciela języka angielskiego';
-                            break;
-                        case 4:
-                            echo 'Panel nauczyciela religii';
-                            break;
-                        case 5:
-                            echo 'Panel nauczyciela muzyki i rytmiki';
-                            break;
-                        case 6:
-                            echo 'Panel pomocy nauczycielskiej';
-                            break;
-                    }
-                    ?>
-            </h3>
-
-            <div class="nav__links">
-                <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
-                <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
-                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
-                <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
-            </div>
-            <?php
-            }
-            ?>
+            <?php } ?>
         </nav>
+
+        <main>
+            <h2>Przegląd przedszkolaka</h2>
+            <?php
+                    require_once 'functions.php';
+                    echo '<div class="preschooler-banner">';
+                    echo '<div class="img preschooler-banner__img">';
+                    $src = getGender($preschooler['pesel']) == 'M' ? 'boy.jpg' : 'girl.jpg';
+                    echo '<img src="../img/preschoolers/'. $src . '" alt="przedszkolak">';
+                    echo '</div>';
+                    echo '<h3>' . $preschooler['imie'] .' '. $preschooler['nazwisko'] .'</h3>';
+                    if (getGender($preschooler['pesel']) === 'M') {
+                        echo '<h4>Chłopiec</h4>';
+                    } else {
+                        echo '<h4>Dziewczynka</h4>';
+                    }
+
+                    $group_name = $conn->query("SELECT nazwa_grupy FROM grupy WHERE id_grupy=". $preschooler['grupa'])->fetch_assoc()['nazwa_grupy'];
+                    echo '<h4>Grupa: ' . $group_name .'</h4>';
+                    echo '<h4>Data urodzenia: ' . date_format(date_create(birthDate($preschooler['pesel'])), 'j.m.Y') .'r.</h4>';
+                    if($preschooler['alergeny'] == '') echo '<h4>Brak zgłoszonych alergenów</h4>';
+                    else echo '<h4>Zgłoszone alergeny: ' . $preschooler['alergeny'] .'</h4>';
+                    if($_SESSION['user']['rank']==1) echo '<a class="form-cancel" href="edytuj-przedszkolaka.php?preschooler_id=' . $preschooler['id_przedszkolaka'] .'">Edytuj</a>';
+                    echo '</div>';
+            ?>
+        </main>
     </div>
 </body>
 </html>

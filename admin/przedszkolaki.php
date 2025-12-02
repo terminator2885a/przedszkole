@@ -26,6 +26,55 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <style>
+        .search_form{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search_form input, .search_form select,.search_form option{
+            font-size: 18px;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+        }
+        .search_form input[type='text']{
+            width: 300px;
+        }
+
+        .search_form input[type='submit']{
+            background-color: var(--bg-primary);
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .search_form input[type='submit']:hover{
+            background-color: #fff;
+            color: var(--text);
+        }
+
+        .error-message {
+            background-color: #ffcccc;
+            color: #c00;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c00;
+        }
+        .success-message {
+            background-color: #ccffcc;
+            color: #060;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #060;
+        }
+            
+        }
+    </style>
+
     <?php if($_SESSION['user']['rank']==1) {?>
     <title>Przegląd przedszkolaków - Dyrektor w Niepublicznym Przedszkolu "Małe Skrzaty" w Łodzi</title>
     <?php } else{ ?>
@@ -67,14 +116,14 @@
                     Przedszkolaki
                     <ul>
                         <li class="current"><a href="przedszkolaki.php">Przegląd</a></li>
-                        <li><a href="dodaj-przedszkolaka.php">Dodaj</a></li>
+                        <li><a href="edytuj-przedszkolaka.php">Dodaj</a></li>
                     </ul>
                 </div>
                 <div class="nav__link dropdown">
                     Nauczyciele
                     <ul>
                         <li><a href="nauczyciele.php">Przegląd</a></li>
-                        <li><a href="dodaj-nauczyciela.php">Dodaj</a></li>
+                        <li><a href="edytuj-nauczyciela.php">Dodaj</a></li>
                     </ul>
                 </div>
                 <div class="nav__link dropdown">
@@ -85,6 +134,7 @@
                     </ul>
                 </div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
+                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
 
@@ -97,6 +147,7 @@
                 <div class="nav__link current"><a href="przedszkolaki.php">Moje przedszkolaki</a></div>
                 <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
+                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
             <?php
@@ -106,6 +157,22 @@
 
         <main>
             <h2>Przedszkolaki</h2>
+
+            <?php
+                if(isset($_SESSION['add'])){
+                    echo '<div class="success-message">Nauczyciel został dodany. Jego nowe hasło to: '. $_SESSION['password'] . '</div>';
+                    unset($_SESSION['password']);
+                    unset($_SESSION['add']);
+                }elseif(isset($_SESSION['edit'])){
+                    unset($_SESSION['edit']);
+                    echo '<div class="success-message">Zmiany zostały zapisane.</div>';
+                }
+                elseif(isset($_SESSION['error'])){
+                    echo '<div class="error-message">'. $_SESSION['error'] . '</div>';
+                    unset($_SESSION['error']);
+                }
+            ?>
+
             <h3><i class="fas fa-search"></i> Wyszukaj</h3>
             <form action="przedszkolaki.php" method="post" class="search_form">
                 <input type="text" name="name" id="name" placeholder="Imię i nazwisko">
@@ -128,6 +195,8 @@
 
             <!-- Search form - code -->
             <?php
+                $name_given = false;
+                $group_selected = false;
                 if(isset($_POST['name']) || isset($_POST['group'])){
                     if($_POST['name'] == '') $name_given = false;
                     else $name_given = true;
@@ -142,13 +211,13 @@
                     $all = $_GET['all'] == 'true';
                 }
                 if($_SESSION['user']['rank']==1){
-                    $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy";
+                    $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy ORDER BY przedszkolaki.id_przedszkolaka";
 
                     if(isset($_POST['name'])){
-                        if($name_given && $group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' AND przedszkolaki.grupa='" . $_POST['group'] . "'";
-                        else if($name_given) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%'";
-                        else if($group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy przedszkolaki.grupa='" . $_POST['group'] . "'";
-                        else $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy";
+                        if($name_given && $group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' AND przedszkolaki.grupa='" . $_POST['group'] . "' ORDER BY przedszkolaki.id_przedszkolaka";
+                        else if($name_given) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' ORDER BY przedszkolaki.id_przedszkolaka";
+                        else if($group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE przedszkolaki.grupa='" . $_POST['group'] . "' ORDER BY przedszkolaki.id_przedszkolaka";
+                        else $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy ORDER BY przedszkolaki.id_przedszkolaka";
                     }
                 }
                 else
@@ -185,33 +254,20 @@
                 <?php
                     while($row = $result->fetch_assoc()){
                         echo '<tr>';
-                        echo '<td>' . $row['id_nauczyciela'] . '</td>';
+                        echo '<td>' . $row['id_przedszkolaka'] . '</td>';
                         echo '<td>' . $row['nazwisko'] . '</td>';
                         echo '<td>' . $row['imie'] . '</td>';
-                        if($row['ranga'] != 2)
-                            echo '<td>' . $row['nazwa_rangi'] . '</td>';
-                        else{
-                            $query2 = "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $row['id_nauczyciela'] . " OR wychowawca2=" . $row['id_nauczyciela'];
-
-                            $result2 = $conn->query($query2);
-                            $row2 = $result2->fetch_assoc();
-                            
-                            echo '<td>wychowawca ('. $row2['nazwa_grupy']. ')</td>'; 
-
-                            $result2->free_result();
-                        }
-
+                        echo '<td>' . $row['nazwa_grupy'] . '</td>';
                         if($all==true){
-                             echo '<td>' . $row['pesel'] . '</td>';
-                             echo '<td>' . $row['nr_telefonu'] . '</td>';
-                             echo '<td>' . $row['e_mail'] . '</td>';
-                             echo '<td>' . $row['login'] . '</td>';
+                            echo '<td>' . $row['pesel'] . '</td>';
+                            echo '<td>' . $row['nr_telefonu'] . '</td>';
+                            echo '<td>' . $row['e_mail'] . '</td>';
+                            echo '<td>' . $row['login'] . '</td>';
                         }
-
-                        echo '<td><a href="przedszkolak.php?id=' . $row['id_przedszkolaka'] . '">Pokaż</a></td>';
-                        
-                        if($_SESSION['user']['rank'] == 1) echo '<td class="remove"><a href="remove-preschooler.php?preschooler_id=' . $row['id_przedszkolaka'] . '">Usuń przedszkolaka</a>';
-                        echo '</tr>';
+                        echo "<td><a href='przedszkolak.php?id=". $row['id_przedszkolaka'] ."'>Więcej</a></td>";
+                        if($_SESSION['user']['rank']==1)
+                            echo '<td class="remove"><a href="remove-preschooler.php?preschooler_id=' . $row['id_przedszkolaka'] . '">Usuń przedszkolaka</a>';
+                        echo "</tr>";
                     }
                 ?>
 

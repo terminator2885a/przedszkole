@@ -8,7 +8,7 @@
     $conn = new mysqli($host, $user, $pass, $db);
     mysqli_set_charset($conn, 'utf8mb4');
 
-    if(isset($_POST['tresc_komunikatu']])){
+    if(isset($_POST['tresc_komunikatu'])){
         $content = trim($_POST['tresc_komunikatu']);
         $date = date('Y-m-d');
     

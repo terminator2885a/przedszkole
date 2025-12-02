@@ -1,14 +1,13 @@
 article {
     overflow-x: auto;
     
-    table {
+    /* table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
         font-size: 18px;
         /* table-layout: fixed; */
-    }
-    
+    /*}
     thead {
         background-color: #f0f0f0;
     }
@@ -60,5 +59,40 @@ article {
     
     li::marker {
         color: var(--text);
+    } */
+
+    table{
+        font-family: 'Arial', sans-serif;
+        margin: 20px auto;
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        table-layout: fixed;
+    }
+
+    table, tr, td, th{
+        border: 1px solid #ddd;
+    }
+
+    th{
+        background-color: var(--bg-primary);
+        color: #fff;
+        padding: 15px;
+        font-weight: bold;
+        text-align: left;
+        font-size: 15px;
+    }
+
+    td{
+        padding: 10px 15px;
+        font-size: 17px;
+    }
+
+    tr:nth-child(odd){
+        background-color: #C9FFE2;
+    }
+
+    tr:hover{
+        background-color: var(--bg-secondary);
     }
 }
