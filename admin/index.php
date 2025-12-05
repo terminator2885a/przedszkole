@@ -19,9 +19,14 @@
         "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $_SESSION['user']['id'] . " OR wychowawca2=" . $_SESSION['user']['id'];
 
         $result = $conn->query($query);
-        $row = $result->fetch_assoc();
-        $_SESSION['group_name'] = $row['nazwa_grupy'];
-
+        if($result->num_rows != 0){
+            $row = $result->fetch_assoc();
+            $_SESSION['group_name'] = $row['nazwa_grupy'];
+            header('Location: moja-grupa.php');
+        }else{
+            $_SESSION['group_name'] = null;
+        }
+        
         $result->free_result();
 
     }
@@ -75,7 +80,11 @@
                         echo '<h4>Dyrektor przedszkola</h4>';
                         break;
                     case 2:
-                        echo '<h4>Wychowawca grupy '. $_SESSION['group_name'] .'</h4>';
+                        if(!is_null($_SESSION['group_name'])) {
+                            echo '<h4>Wychowawca grupy '. $_SESSION['group_name'] .'</h4>';
+                        }else{
+                            echo '<h4>Masz uprawnienia wychowawcy, z których nie możesz skorzystać, ponieważ nie jesteś wychowawcą żadnej grupy.</h4>';
+                        }
                         break;
                     default:
                         echo '<h4>' . ucfirst($_SESSION['user']['rank_name']) . '</h4>';
@@ -121,8 +130,10 @@
             ?>
             <h3>Panel wychowawcy</h3>
             <div class="nav__links">
+                <?php if(!is_null($_SESSION['group_name'])) { ?>
                 <div class="nav__link current"><a href="index.php">Moja grupa</a></div>
                 <div class="nav__link"><a href="przedszkolaki.php">Moje przedszkolaki</a></div>
+                <?php } ?>
                 <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>

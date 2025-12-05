@@ -218,6 +218,7 @@ $conn->close();
                 <div class="aside__link"><a href="nauczyciele.php">Nasze nauczycielki</a></div>
                 <div class="aside__link"><a href="plan_dnia.html">Rozkład dnia</a></div>
                 <div class="aside__link current"><a href="rekrutacja.html">Rekrutacja</a></div>
+                <div class="aside__link"><a href="galeria.html">Galeria</a></div>
                 <div class="aside__link"><a href="rodo.html">Ochrona danych osobowych</a></div>
                 <div class="aside__link"><a href="maloletni.html">Standardy ochrony małoletnich</a></div>
                 <div class="aside__link"><a href="https://bip.gov.pl">Biuletyn informacji publicznej</a></div>

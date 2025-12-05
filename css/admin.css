@@ -88,10 +88,10 @@ nav h3{
     letter-spacing: 2px;
 }
 
-main{
+/* main{
     display: flex;
     flex-direction: column;
-}
+} */
 
 main h2, main h3{
     text-align: center;
@@ -239,3 +239,240 @@ main tr:hover{
     background-color: #fff;
     color: var(--text);
 }
+
+.messages_table td:nth-child(1), .messages_table th:nth-child(1){
+    width: 20%;
+}
+.messages_table td:nth-child(2), .messages_table th:nth-child(2){
+    width: 20%;
+}
+.messages_table td:nth-child(3), .messages_table th:nth-child(3){
+    width: 60%;
+}
+
+@media (max-width: 768px){
+    .page{
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    main h2, main h3{
+        font-size: 24px;
+        padding: 10px;
+    }
+
+    main table{
+        width: 100%;
+        margin: 15px auto;
+        font-size: 14px;
+        overflow-x: auto;
+        display: block;
+    }
+
+    main th{
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    main td{
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .data_show_hide{
+        font-size: 14px;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+
+    .login-form{
+        padding: 10px;
+    }
+
+    .login-form form{
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+    .login-form form label{
+        font-size: 16px;
+    }
+
+    .login-form form input{
+        width: 100%;
+        max-width: 300px;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .error{
+        font-size: 14px;
+    }
+
+    .add-form{
+        width: 100%;
+        max-width: 100%;
+        margin: 15px auto;
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .add-form label{
+        font-size: 16px;
+    }
+
+    .add-form textarea{
+        font-size: 14px;
+        padding: 10px;
+        min-height: 120px;
+    }
+
+    .add-form input[type='submit'],
+    .add-form button[type='submit']{
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .dropdown{
+        position: relative;
+    }
+
+    .dropdown ul{
+        width: 180px;
+        font-size: 18px;
+        position: absolute;
+        left: 0;
+        background: var(--bg-primary);
+        padding: 0;
+        list-style-type: none;
+        margin-top: 10px;
+        border-radius: 0 0 20px 20px;
+        display: none;
+        z-index: 1000;
+    }
+
+    .dropdown:hover ul,
+    .dropdown:focus-within ul{
+        display: block;
+    }
+
+    .dropdown ul li{
+        font-size: 16px;
+        padding: 12px;
+        color: #fff;
+    }
+
+    .dropdown ul li:hover{
+        background-color: #fff;
+    }
+
+    .dropdown ul li:hover a{
+        color: var(--text);
+    }
+
+    .new{
+        font-size: 16px;
+    }
+
+    nav h3{
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 480px){
+    .page{
+        padding: 0 8px;
+    }
+
+    main h2, main h3{
+        font-size: 20px;
+        padding: 8px;
+    }
+
+    main table{
+        margin: 10px auto;
+        font-size: 12px;
+    }
+
+    main th{
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    main td{
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .data_show_hide{
+        font-size: 12px;
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+
+    .login-form{
+        padding: 8px;
+    }
+
+    .login-form form{
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .login-form form label{
+        font-size: 14px;
+    }
+
+    .login-form form input{
+        width: 100%;
+        max-width: 250px;
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .error{
+        font-size: 12px;
+    }
+
+    .add-form{
+        margin: 10px auto;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .add-form label{
+        font-size: 14px;
+    }
+
+    .add-form textarea{
+        font-size: 13px;
+        padding: 8px;
+        min-height: 100px;
+    }
+
+    .add-form input[type='submit'],
+    .add-form button[type='submit']{
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .dropdown ul{
+        width: 160px;
+    }
+
+    .dropdown ul li{
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .new{
+        font-size: 14px;
+    }
+
+    nav h3{
+        font-size: 16px;
+        letter-spacing: 0.5px;
+    }
+}
+

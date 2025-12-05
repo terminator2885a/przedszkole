@@ -47,6 +47,7 @@
                 <div class="aside__link current"><a href="nauczyciele.php">Nasze nauczycielki</a></div>
                 <div class="aside__link"><a href="plan_dnia.html">Rozkład dnia</a></div>
                 <div class="aside__link"><a href="rekrutacja.html">Rekrutacja</a></div>
+                <div class="aside__link"><a href="galeria.html">Galeria</a></div>
                 <div class="aside__link"><a href="rodo.html">Ochrona danych osobowych</a></div>
                 <div class="aside__link"><a href="maloletni.html">Standardy ochrony małoletnich</a></div>
                 <div class="aside__link"><a href="https://bip.gov.pl">Biuletyn informacji publicznej</a></div>
@@ -73,8 +74,12 @@
                             }
                             $query2 = "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $row['id_nauczyciela'] . " OR wychowawca2=" . $row['id_nauczyciela'];
                             $result2 = $conn->query($query2);
-                            $group_name = $result2->fetch_assoc()['nazwa_grupy'];
-                            echo '<li><span class="teacher__name">' . $row['imie_i_nazwisko'] . '</span> - wychowawca grupy ' . $group_name . '</li>';
+                            if($result2->num_rows != 0){
+                                $group_name = $result2->fetch_assoc()['nazwa_grupy'];
+                                echo '<li><span class="teacher__name">' . $row['imie_i_nazwisko'] . '</span> - wychowawca grupy ' . $group_name . '</li>';
+                            }else{
+                                echo '<li><span class="teacher__name">' . $row['imie_i_nazwisko'] . '</span> - wychowawca bez grupy</li>';
+                            }
                         }else{
                             if($prev == 2){
                                 $prev = 3;

@@ -214,15 +214,20 @@
                     $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy ORDER BY przedszkolaki.id_przedszkolaka";
 
                     if(isset($_POST['name'])){
-                        if($name_given && $group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' AND przedszkolaki.grupa='" . $_POST['group'] . "' ORDER BY przedszkolaki.id_przedszkolaka";
-                        else if($name_given) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' ORDER BY przedszkolaki.id_przedszkolaka";
+                        
+                        if($name_given && $group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE (CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' OR CONCAT(nazwisko, ' ', imie) LIKE '". $_POST['name'] . "%' AND przedszkolaki.grupa='" . $_POST['group'] . "' ORDER BY przedszkolaki.id_przedszkolaka";
+                        else if($name_given) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE CONCAT(imie, ' ', nazwisko) LIKE '" . $_POST['name'] . "%' OR CONCAT(nazwisko, ' ', imie) LIKE '". $_POST['name'] . "%' ORDER BY przedszkolaki.id_przedszkolaka";
                         else if($group_selected) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE przedszkolaki.grupa='" . $_POST['group'] . "' ORDER BY przedszkolaki.id_przedszkolaka";
                         else $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy ORDER BY przedszkolaki.id_przedszkolaka";
                     }
                 }
-                else
+                else{
                     $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE grupy.nazwa_grupy='". $_SESSION['group_name'] . "'";
-                    $result = $conn->query($query);
+                    if(isset($_POST['name'])){
+                        if($name_given) $query = "SELECT * FROM przedszkolaki JOIN grupy ON przedszkolaki.grupa=grupy.id_grupy WHERE (CONCAT(imie, ' ', nazwisko) LIKE '". $_POST['name'] . "%' OR CONCAT(nazwisko, ' ', imie) LIKE '". $_POST['name'] . "%') AND grupy.nazwa_grupy='". $_SESSION['group_name'] . "'";
+                    }
+                }
+                $result = $conn->query($query);
             ?>
 
             <div class="data_show_hide">

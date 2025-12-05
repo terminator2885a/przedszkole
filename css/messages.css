@@ -1,0 +1,28 @@
+.message {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px; 
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.message p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 18px;
+    text-align: left;
+}
+
+.message h3 {
+    margin: 10px 0;
+    padding: 0;
+    font-size: 20px;
+    color: var(--text);
+    font-weight: bold;
+    text-align: left;
+}
+
+.message_link a{
+    color: var(--text);
+}

@@ -1,6 +1,7 @@
 <?php
     session_start();
     if(!isset($_SESSION['user'])) {header('Location: login-page.php'); exit();}
+    if(!isset($_GET['id'])) {header('Location: wiadomosci.php'); exit();}
 
 
     // print_r($_SESSION['user']);
@@ -19,30 +20,16 @@
         "SELECT nazwa_grupy FROM grupy WHERE wychowawca1=". $_SESSION['user']['id'] . " OR wychowawca2=" . $_SESSION['user']['id'];
 
         $result = $conn->query($query);
-        $row = $result->fetch_assoc();
-        $_SESSION['group_name'] = $row['nazwa_grupy'];
-
+        if($result->num_rows != 0){
+            $row = $result->fetch_assoc();
+            $_SESSION['group_name'] = $row['nazwa_grupy'];
+        }else{
+            $_SESSION['group_name'] = null;
+        }
+        
         $result->free_result();
 
     }
-
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $row = $conn->query("SELECT * FROM nauczyciele WHERE id_nauczyciela=". $_SESSION['user']['id'])->fetch_assoc();
-
-        if(password_verify($_POST['old_password'], $row['password'])){
-            if($_POST['new_password1'] == $_POST['new_password2']){
-                $hashedPassword = password_hash($_POST['new_password1'], PASSWORD_DEFAULT);
-                $conn->query("UPDATE nauczyciele SET password='$hashedPassword' WHERE id_nauczyciela=".$_SESSION['user']['id']);
-                $success = "Hasło zostało zmienione";
-            }else{
-                $error = "Hasła nie są takie same";
-            }
-        } else{
-            $error = "Niepoprawne stare hasło";
-        }
-    }
-
 ?>
 
 <!DOCTYPE html>
@@ -50,74 +37,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/messages.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Zmień hasło - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
 
-    <style>
-        .login-form{
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .login-form form{
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 24px;
-        }
-
-        .login-form form label{
-            color: var(--input);
-            font-size: 20px;
-        }
-
-        .login-form form input, .login-form form button{
-            width: 400px;
-            font-size: 20px;
-            border: none;
-            padding: 8px;
-            color: var(--input);
-            border-radius: 10px;
-            
-        }
-
-        .login-form form input::placeholder{
-            color: #B0B0B0;
-        }
-
-        .login-form form button[type="submit"]{
-            background-color: var(--text);
-            font-family: "Aclonica", sans-serif;
-            color: #fff;
-        }
-
-        .error-message {
-            display: block;
-            background-color: #ffcccc;
-            color: #c00;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #c00;
-        }
-        .success-message {
-            display: block;
-            background-color: #ccffcc;
-            color: #060;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #060;
-        }
-    </style>
-
+    <title>Wiadomości - Niepubliczne Przedszkole "Małe Skrzaty" w Łodzi</title>
 </head>
 <body>
     <div class="page">
@@ -145,7 +77,11 @@
                         echo '<h4>Dyrektor przedszkola</h4>';
                         break;
                     case 2:
-                        echo '<h4>Wychowawca grupy '. $_SESSION['group_name'] .'</h4>';
+                        if(!is_null($_SESSION['group_name'])) {
+                            echo '<h4>Wychowawca grupy '. $_SESSION['group_name'] .'</h4>';
+                        }else{
+                            echo '<h4>Masz uprawnienia wychowawcy, z których nie możesz skorzystać, ponieważ nie jesteś wychowawcą żadnej grupy.</h4>';
+                        }
                         break;
                     default:
                         echo '<h4>' . ucfirst($_SESSION['user']['rank_name']) . '</h4>';
@@ -181,8 +117,8 @@
                         <li><a href="komunikat.php">Komunikaty</a></li>
                     </ul>
                 </div>
-                <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
-                <div class="nav__link current"><a href="zmien-haslo.php">Zmień hasło</a></div>
+                <div class="nav__link current"><a href="wiadomosci.php">Wiadomości</a></div>
+                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
 
@@ -191,11 +127,13 @@
             ?>
             <h3>Panel wychowawcy</h3>
             <div class="nav__links">
+                <?php if(!is_null($_SESSION['group_name'])) { ?>
                 <div class="nav__link"><a href="index.php">Moja grupa</a></div>
                 <div class="nav__link"><a href="przedszkolaki.php">Moje przedszkolaki</a></div>
+                <?php } ?>
                 <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
-                <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
-                <div class="nav__link current"><a href="zmien-haslo.php">Zmień hasło</a></div>
+                <div class="nav__link current"><a href="wiadomosci.php">Wiadomości</a></div>
+                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
             <?php
@@ -222,40 +160,74 @@
 
             <div class="nav__links">
                 <div class="nav__link"><a href="artykul.php">Dodaj artykuł</a></div>
-                <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
-                <div class="nav__link current"><a href="zmien-haslo.php">Zmień hasło</a></div>
+                <div class="nav__link current"><a href="wiadomosci.php">Wiadomości</a></div>
+                <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
             </div>
             <?php
             }
             ?>
         </nav>
-    
+
         <main>
-            <h2>Zmień hasło</h2>
-            <div class="login-form">
-                <form method="post">
-                    <label for="old-password">Stare hasło:</label>
-                    <input type="password" id="old-password" name="old_password">
-                    <label for="new-password1">Nowe hasło:</label>
-                    <input type="password" id="new-password1" name="new_password1">
-                    <label for="new-password2">Powtórz nowe hasło:</label>
-                    <input type="password" id="new-password2" name="new_password2">
-                    <button type="submit" name="change_password">Zmień hasło</button>
-                </form>
-            </div>
-            
+            <aside>
+                <div class="aside__link"><a href="wiadomosci.php"><i class="fa-solid fa-arrow-left"></i> Powrót</a></div>
+            </aside>
+
+            <section>
             <?php
-                if (isset($error)){
-                    echo "<span class='error-message'>$error</span>";
-                    unset($error);
+                $query = "SELECT * FROM wiadomosci WHERE id_wiadomosci=".$_GET["id"];
+                $result = $conn->query($query);
+                $row = $result->fetch_assoc();
+
+                // Nadawca wiadomości
+                $prefix = substr($row['nadawca'], 0, 1);
+                switch($prefix){
+                    case 'p':
+                        $query = "SELECT imie, nazwisko FROM przedszkolaki WHERE id_przedszkolaka=" . intval(substr($row['nadawca'], 1));
+                        $result = $conn->query($query);
+                        $row_sender = $result->fetch_assoc();
+                        $sender = $row_sender['imie'] . ' ' . $row_sender['nazwisko']. '  (rodzic)';
+
+                        break;
+                    case 'n':
+                        $query = "SELECT imie, nazwisko FROM nauczyciele WHERE id_nauczyciela=" . intval(substr($row['nadawca'], 1));
+                        $result = $conn->query($query);
+                        $row_sender = $result->fetch_assoc();
+                        $sender = $row_sender['imie'] . ' ' . $row_sender['nazwisko']. ' (nauczyciel)';
+                        break;
                 }
 
-                if(isset($success)){
-                    echo "<span class='success-message'>$success</span>";
-                    unset($success);
+                // Odbiorca wiadomości
+                $prefix = substr($row['odbiorca'], 0, 1);
+                switch($prefix){
+                    case 'p':
+                        $query = "SELECT imie, nazwisko FROM przedszkolaki WHERE id_przedszkolaka=" . intval(substr($row['odbiorca'], 1));
+                        $result = $conn->query($query);
+                        $row_receiver = $result->fetch_assoc();
+                        $receiver = $row_receiver['imie'] . ' ' . $row_receiver['nazwisko'] . ' (rodzic)';
+                        break;
+                    case 'n':
+                        $query = "SELECT imie, nazwisko FROM nauczyciele WHERE id_nauczyciela=" . intval(substr($row['odbiorca'], 1));
+                        $result = $conn->query($query);
+                        $row_receiver = $result->fetch_assoc();
+                        $receiver = $row_receiver['imie'] . ' ' . $row_receiver['nazwisko'] . ' (nauczyciel)';
+                        break;
+                    case 'g':
+                        $query = "SELECT nazwa_grupy FROM grupy WHERE id_grupy=" . intval(substr($row['odbiorca'], 1));
+                        $result = $conn->query($query);
+                        $row_receiver = $result->fetch_assoc();
+                        $receiver =  'Rodzice z grupy '. $row_receiver['nazwa_grupy'];
+                        break;
                 }
+                echo '<div class="message">';
+                echo '<p>Od: ' . $sender . '</p>';
+                echo '<p>Do: ' . $receiver . '</p>';
+                echo '<h3>Temat: ' . $row['temat'] . '</h3>';
+                echo '<p>' . $row['tresc'] . '</p>';
+                echo '</div>'; 
             ?>
+            </section>
         </main>
     </div>
 </body>
