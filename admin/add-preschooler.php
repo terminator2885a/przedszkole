@@ -30,6 +30,9 @@ if (isset($_POST['l_name'])) {
 
     if ($edit) {
         $stmt = $conn->prepare("UPDATE przedszkolaki SET nazwisko=?, imie=?, pesel=?, grupa=?, imiona_rodzicow=?, alergeny=?, religia=?, e_mail=?, login=? WHERE id_przedszkolaka=?");
+        if ($stmt === false) {
+            die("Prepare failed: " . $conn->error);
+        }
         $stmt->bind_param("sssississi", $l_name, $f_name, $pesel, $group, $parents, $allergens, $religion, $e_mail, $login, $preschooler_id);
         $stmt->execute();
         $stmt->close();
@@ -40,6 +43,9 @@ if (isset($_POST['l_name'])) {
         $hashedPassword = password_hash($generatedPassword, PASSWORD_DEFAULT);
 
         $stmt = $conn->prepare("INSERT INTO przedszkolaki (nazwisko, imie, pesel, grupa, imiona_rodzicow, alergeny, religia, e_mail, login, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        if ($stmt === false) {
+            die("Prepare failed: " . $conn->error);
+        }
         $stmt->bind_param("sssississs", $l_name, $f_name, $pesel, $group, $parents, $allergens, $religion, $e_mail, $login, $hashedPassword);
         $stmt->execute();
         $preschooler_id = $conn->insert_id;

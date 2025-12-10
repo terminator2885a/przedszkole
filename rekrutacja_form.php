@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $last_name = htmlspecialchars($_POST['nazwisko'] ?? '');
     $pesel = htmlspecialchars($_POST['pesel'] ?? '');
     $imiona_rodzicow = htmlspecialchars($_POST['imiona_rodzicow'] ?? '');
-    $nr_telefonu = htmlspecialchars($_POST['nr_telefonu'] ?? '');
     $e_mail = htmlspecialchars($_POST['e_mail'] ?? '');
     $alergeny = htmlspecialchars($_POST['alergeny'] ?? '');
     $religia = isset($_POST['religia']) ? 1 : 0;
@@ -66,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $generated_group = 1;
         }
         
-        $query = "INSERT INTO przedszkolaki (imie, nazwisko, pesel, imiona_rodzicow, nr_telefonu, e_mail, alergeny, religia, login, password, grupa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO przedszkolaki (imie, nazwisko, pesel, imiona_rodzicow, e_mail, alergeny, religia, login, password, grupa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $conn->prepare($query);
         if ($stmt === false) {
@@ -75,12 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashed_password = password_hash($generated_password, PASSWORD_DEFAULT);
             
             $stmt->bind_param(
-                "sssssssisss",
+                "ssssssisss",
                 $first_name,
                 $last_name,
                 $pesel,
                 $imiona_rodzicow,
-                $nr_telefonu,
                 $e_mail,
                 $alergeny,
                 $religia,
@@ -90,11 +88,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             
             if ($stmt->execute()) {
+                $preschooler_id = $conn->insert_id;
+                
                 $group_name = $conn->query(sprintf("SELECT nazwa_grupy FROM grupy WHERE id_grupy = %d", $generated_group))->fetch_assoc()['nazwa_grupy'];
                 $success = "Dziecko zostało pomyślnie zarejestrowane!<br>Login: <strong>$generated_login</strong><br>Hasło tymczasowe: <strong>$generated_password</strong><br>
                 Na podstawie wieku dziecko zostało automatycznie przydzielone do grupy
-                <strong>$group_name</strong>";
+                <strong>$group_name</strong><br>Po zalogowaniu, w zakładce <strong>wiadomości</strong> znajduje się wiadomość powitalna.";
                 $form_submitted = true;
+
+                // Wysyłanie wiadomości
+                $date = date('Y-m-d H:i:s');
+                $receiver = sprintf('p%03d', $preschooler_id);
+                $send_message = $conn->prepare("INSERT INTO wiadomosci (data_wyslania, nadawca, odbiorca, temat, tresc) VALUES (?, ?, ?, ?, ?)");
+                $send_message->bind_param(
+                    'sssss',
+                    $date,
+                    $auto_generated_sender,
+                    $receiver,
+                    $auto_generated_topic,
+                    $auto_generated_message
+                );
+                $send_message->execute();
+                $send_message->close();
             } else {
                 $error = "Błąd podczas rejestracji: " . $stmt->error;
             }
@@ -260,19 +275,12 @@ $conn->close();
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="imiona_rodzicow">Imiona i nazwiska rodziców/opiekunów</label>
+                                <label for="imiona_rodzicow" class="required">Imiona i nazwiska rodziców/opiekunów</label>
                                 <input type="text" id="imiona_rodzicow" name="imiona_rodzicow" placeholder="np. Jan Kowalski, Maria Kowalska" required>
                             </div>
-                        </div>
-
-                        <div class="form-row">
                             <div class="form-group">
-                                <label for="nr_telefonu">Numer telefonu kontaktowy</label>
-                                <input type="tel" id="nr_telefonu" name="nr_telefonu" required pattern="[0-9]{9}|\([0-9]{3}\)[0-9]{7}|[0-9]{3}-[0-9]{3}-[0-9]{3}">
-                            </div>
-                            <div class="form-group">
-                                <label for="e_mail">Adres e-mail</label>
-                                <input type="email" id="e_mail" name="e_mail" required>
+                                <label for="e_mail" class="required">Adres e-mail kontaktowy rodzica/opiekuna</label>
+                                <input type="email" id="e_mail" name="e_mail" placeholder="example@example.com" required>
                             </div>
                         </div>
 

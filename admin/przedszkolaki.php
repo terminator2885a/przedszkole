@@ -160,7 +160,7 @@
 
             <?php
                 if(isset($_SESSION['add'])){
-                    echo '<div class="success-message">Nauczyciel został dodany. Jego nowe hasło to: '. $_SESSION['password'] . '</div>';
+                    echo '<div class="success-message">Przedszkolak został dodany. Jego nowe hasło to: '. $_SESSION['password'] . '</div>';
                     unset($_SESSION['password']);
                     unset($_SESSION['add']);
                 }elseif(isset($_SESSION['edit'])){
@@ -246,7 +246,6 @@
                     <th>Grupa</th>
                     <?php if($all==true){ ?>
                     <th>Pesel</th>
-                    <th>Nr telefonu</th>
                     <th>Adres e-mail</th>
                     <th>Login</th>
                     <?php } ?>
@@ -265,7 +264,6 @@
                         echo '<td>' . $row['nazwa_grupy'] . '</td>';
                         if($all==true){
                             echo '<td>' . $row['pesel'] . '</td>';
-                            echo '<td>' . $row['nr_telefonu'] . '</td>';
                             echo '<td>' . $row['e_mail'] . '</td>';
                             echo '<td>' . $row['login'] . '</td>';
                         }

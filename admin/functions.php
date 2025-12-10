@@ -90,4 +90,32 @@
             $gender = intval(substr($pesel, 9, 1));
             return $gender%2==0 ? "F" : "M";
         }
+        $auto_generated_sender = 'n001';
+        $auto_generated_topic = 'Witamy w przedszkolu Małe Skrzaty';
+        $auto_generated_message = '
+<p>Drogi Rodzicu,</p>
+
+<p>Cieszymy się, że Twoje dziecko dołączyło do naszej przedszkolnej społeczności! 🎨✨  
+Przed Wami wyjątkowy czas pełen zabawy, nauki i odkrywania świata w bezpiecznym i przyjaznym otoczeniu.</p>
+
+<h4>🌟 Co nas wyróżnia?</h4>
+<ul>
+  <li><strong>Bezpieczna i ciepła atmosfera</strong> – każde dziecko czuje się tu jak w domu.</li>
+  <li><strong>Rozwój przez zabawę</strong> – kreatywne zajęcia wspierające ciekawość i wyobraźnię.</li>
+  <li><strong>Indywidualne podejście</strong> – dostrzegamy potrzeby i talenty każdego malucha.</li>
+  <li><strong>Współpraca z rodzicami</strong> – razem tworzymy najlepsze warunki dla rozwoju dzieci.</li>
+</ul>
+
+<h4>📅 Pierwsze dni</h4>
+<ul>
+  <li>Zachęcamy do spokojnych, krótkich pożegnań – to pomaga dziecku poczuć się pewniej.</li>
+  <li>Prosimy o przyniesienie kapci i ulubionej maskotki, która doda otuchy w nowym miejscu.</li>
+  <li>Nasza kadra zawsze służy pomocą i wsparciem – nie wahaj się pytać!</li>
+  <li>Prosimy o uzupełnienie formalności w ciągu tygodnia - sekretariat jest otwarty od poniedziałku do piątku w godzinach <strong>8:00-16:00</strong>.</li>
+</ul>
+
+<p><strong>💌 Razem tworzymy miejsce, w którym dzieci mogą rosnąć szczęśliwe i pełne radości.</strong></p>
+<p>Dziękujemy za zaufanie i cieszymy się na wspólną przygodę!</p>
+<p><i>Wiadomość wygenerowana automatycznie przez system przedszkola Małe Skrzaty.</i></p>
+        '
 ?>

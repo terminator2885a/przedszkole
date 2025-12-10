@@ -89,7 +89,7 @@
                     Nauczyciele
                     <ul>
                         <li><a href="nauczyciele.php">Przegląd</a></li>
-                        <li class="current"><a href="dodaj-nauczyciela.php">Dodaj</a></li>
+                        <li class="current"><a href="edytuj-nauczyciela.php">Dodaj</a></li>
                     </ul>
                 </div>
                 <div class="nav__link dropdown">

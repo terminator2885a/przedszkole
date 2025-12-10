@@ -8,9 +8,9 @@
     mysqli_set_charset($conn, 'utf8mb4');
 
     $edit = false;
-    if(isset($_GET['article-id'])){
+    if(isset($_GET['article_id'])){
         $edit = true;
-        $article_id = $_GET['article-id'];
+        $article_id = $_GET['article_id'];
     }
 
 ?>
@@ -97,6 +97,9 @@
                 <div class="nav__link"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="nav__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="nav__link logout"><a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
+            </div>
+            <div class="nav__links">
+                <div class="nav__link"><a href="artykul.php"><i class="fa-solid fa-arrow-left"></i>Wróć do listy artykułów</a></div>
             </div>
 
              <?php

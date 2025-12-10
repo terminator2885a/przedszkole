@@ -27,7 +27,7 @@
 
         if($edit){
             $query = $conn->prepare("UPDATE nauczyciele SET nazwisko=?, imie=?, pesel=?, ranga=?, nr_telefonu=?, e_mail=?, login=? WHERE id_nauczyciela=?");
-            $query->bind_param("ssssiss", $l_name, $f_name, $pesel, $rank, $phone, $e_mail, $login);
+            $query->bind_param("sssisssi", $l_name, $f_name, $pesel, $rank, $phone, $e_mail, $login, $teacher_id);
             $query->execute();
             $query->close();
             $get = 'edit=true';

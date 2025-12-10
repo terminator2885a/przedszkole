@@ -36,6 +36,6 @@
     }
 
     $conn->close();
-    header('Location: edytuj-artykul.php?article-id='.$article_id);
+    header('Location: edytuj-artykul.php?article_id='.$article_id);
 
 ?>

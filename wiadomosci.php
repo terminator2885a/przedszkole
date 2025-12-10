@@ -102,15 +102,20 @@
                 <div class="aside__link"><a href="rodzic-login.php">Zaloguj się</a></div>
                 <?php } else { ?>
                 <div class="aside__link"><a href="dziecko.php">Informacje o dziecku</a></div>
-                <div class="aside__link <?php if(!isset($_GET['wyslane'])) echo 'current'; ?>"><a href="wiadomosci.php?">Wiadomości <i class="fa-solid fa-arrow-right"></i> Skrzynka odbiorcza</a></div>
-                <div class="aside__link <?php if(isset($_GET['wyslane'])) echo 'current'; ?>"><a href="wiadomosci.php?wyslane">Wiadomości <i class="fa-solid fa-arrow-right"></i> Wysłane</a></div>
-                <div class="aside__link"><a href="napisz-wiadomosc.php">Wiadomości <i class="fa-solid fa-arrow-right"></i> Napisz wiadomość</a></div>
+                <div class="aside__link current"><a href="wiadomosci.php">Wiadomości</a></div>
                 <div class="aside__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="aside__link logout"><a href="rodzic-logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
                 <?php } ?>
             </aside>
             <article>
                 <h2>Wiadomości</h2>
+                <nav>
+                    <div class="nav__links">
+                        <div class="nav__link <?php if(!isset($_GET['wyslane'])) echo 'current'; ?>"><a href="wiadomosci.php?"> Skrzynka odbiorcza</a></div>
+                        <div class="nav__link <?php if(isset($_GET['wyslane'])) echo 'current'; ?>"><a href="wiadomosci.php?wyslane"> Wysłane</a></div>
+                        <div class="nav__link"><a href="napisz-wiadomosc.php">Napisz wiadomość</a></div>
+                    </div>
+                </nav>
                 <?php
                 // print_r($_SESSION['parent']);
                 $query = '';

@@ -124,7 +124,7 @@
     
         <main>
             <aside>
-                <div class="aside__link current"><a href="rodzic.php">Komunikaty dyrekcji</a></div>
+                <div class="aside__link"><a href="rodzic.php">Komunikaty dyrekcji</a></div>
                 <div class="aside__link"><a href="jadlospis.php">Jadłospis</a></div>
                 <?php
                 if(!$logged){
@@ -133,7 +133,7 @@
                 <?php } else { ?>
                 <div class="aside__link"><a href="dziecko.php">Informacje o dziecku</a></div>
                 <div class="aside__link"><a href="wiadomosci.php">Wiadomości</a></div>
-                <div class="aside__link"><a href="zmien-haslo.php">Zmień hasło</a></div>
+                <div class="aside__link current"><a href="zmien-haslo.php">Zmień hasło</a></div>
                 <div class="aside__link logout"><a href="rodzic-logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Wyloguj się</a></div>
                 <?php } ?>
             </aside>
